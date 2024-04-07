@@ -98,7 +98,6 @@ def get_skew(number_list, mean, median):
     return skew
 
 def main():
-    #54,53,49,73,73,80
     number_list = []
     print("******************************************")# Adding a separation line.
     number_list = get_number_list(number_list)
