@@ -1,3 +1,11 @@
+def read_file(number_list):
+    with open("grades.txt") as file:
+        number = file.read()
+        
+        for ch in number:
+            if ch in "qwertyuiopasdfghjklzxcvbnm[}./;']#=-<>?:@{~+_)(*&^%$£)":
+                number[ch] = ' '
+
 def check_number(num, num_list):
     if num.isdigit():
         num = int(num)
@@ -51,7 +59,10 @@ def get_mean(number_list):
 
 def get_median(number_list):
     num_list = number_list[:]
-    num_list.sort()
+    for i in range(len(num_list)):
+        for j in range(i + 1, len(num_list)):
+            if num_list[i] > num_list[j]:
+                num_list[i], num_list[j] = num_list[j], num_list[i]
     while True:
         if len(num_list) > 2:
             del num_list[0]
@@ -129,6 +140,10 @@ def main():
             print(">>> The SKEWNESS is: " + str(get_skew(number_list, get_mean(number_list), get_median(number_list))))
             print("******************************************")# Adding a separation line.
         elif choice == '5':
+            for i in range(len(number_list)):
+                for j in range(i + 1, len(number_list)):
+                    if number_list[i] > number_list[j]:
+                        number_list[i], number_list[j] = number_list[j], number_list[i]
             print(">>> Grades", number_list.sort())
             print("******************************************")# Adding a separation line.
         elif choice == '6':
