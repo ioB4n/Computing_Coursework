@@ -1,10 +1,23 @@
 def read_file(number_list):
+    num_list = number_list[:]
     with open("grades.txt") as file:
-        number = file.read()
-        
-        for ch in number:
-            if ch in "qwertyuiopasdfghjklzxcvbnm[}./;']#=-<>?:@{~+_)(*&^%$£)":
-                number[ch] = ' '
+        content = file.read()
+        content = content.lower()
+        for ch in "qwertyuiopasdfghjklzxcv\nbnm! #$%&\"()*+-./:;<=>?@[\\]^_`{|}~'":
+            content = content.replace(ch, '')
+        if ',' in content:
+            numbers = content.split(',')
+            for num in numbers:
+                if num.isdigit():
+                    num = int(num)
+                    if num >= 0 and num <= 100:
+                        num_list.append(num)
+        else:
+            if content.isdigit():
+                content = int(content)
+                if content >= 0 and content <= 100:
+                    num_list.append(content)
+    return num_list
 
 def check_number(num, num_list):
     if num.isdigit():
@@ -20,7 +33,7 @@ def check_number(num, num_list):
     return num_list
 
 def get_number_list(number_list):
-    num_list = number_list
+    num_list = number_list[:]
     #The list of numbers at this point can either be empty or contain at least 2 elements.
     while len(num_list) < 2:
         print(">>> For multiple numbers, separate using a comma(,).")
@@ -59,10 +72,7 @@ def get_mean(number_list):
 
 def get_median(number_list):
     num_list = number_list[:]
-    for i in range(len(num_list)):
-        for j in range(i + 1, len(num_list)):
-            if num_list[i] > num_list[j]:
-                num_list[i], num_list[j] = num_list[j], num_list[i]
+    num_list.sort()
     while True:
         if len(num_list) > 2:
             del num_list[0]
@@ -107,8 +117,10 @@ def get_skew(number_list, mean, median):
 
 def main():
     number_list = []
+    number_list = read_file(number_list)
     print("******************************************")# Adding a separation line.
     number_list = get_number_list(number_list)
+    print(number_list)
     while True:
         print("1. Get the MEAN.")
         print("2. Get the MEDIAN.")
@@ -140,15 +152,17 @@ def main():
             print(">>> The SKEWNESS is: " + str(get_skew(number_list, get_mean(number_list), get_median(number_list))))
             print("******************************************")# Adding a separation line.
         elif choice == '5':
-            for i in range(len(number_list)):
-                for j in range(i + 1, len(number_list)):
-                    if number_list[i] > number_list[j]:
-                        number_list[i], number_list[j] = number_list[j], number_list[i]
-            print(">>> Grades", number_list.sort())
+            sorted_list = sorted(number_list)
+            print(">>> Grades", sorted_list)
             print("******************************************")# Adding a separation line.
         elif choice == '6':
             number_list = get_number_list(number_list)
         elif choice == 'q':
+            with open("grades.txt", 'w+') as file:
+                file.write("Grades: ")
+            with open("grades.txt", 'a') as file:
+                for num in number_list:
+                    file.write(str(num) + ',')
             break
         else:
             print(">>>", choice, "is not an option!")
