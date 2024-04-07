@@ -4,6 +4,5 @@ with open("grades.txt") as file:
     for ch in "qwertyuiopasdfghjklzxcv\nbnm!#$%&\"()*+-./:;<=>?@[\\]^_`{|}~'":
         number = number.replace(ch, ' ')
 
-    number = number.strip()
-    
-    print(number)
+    stripped_number = number.strip()
+    print(stripped_number)
