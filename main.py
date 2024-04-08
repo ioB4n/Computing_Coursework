@@ -191,5 +191,5 @@ def main(): # The main method is executed the run the program.
         add_number_to_list(grades_list) # If there aren't enough numbers, the 'add_number_to_list' to make the user have to input them manually.
     get_main_menu(grades_list) # At this point, there should be at least 2 elements inside the list, so the user can proceed to the main menu.
     
-    
-main()
+if __name__ == "__main__":
+    main()
