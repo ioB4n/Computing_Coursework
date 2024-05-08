@@ -29,8 +29,8 @@ def check_number(num, grades_list): # This function is used to check if a number
             grades_list.append(num) # Appending the number to the list of grades.
             print(">>> Added", num, "to the list.") # Printing a confirmation message, showing the new grade that was added to the list.
         else: # If the number isn't within boundaries, the following code is executed.
+            print(">>>", num, "is not within bounds!") # Printing the number that wasn't added to the list.
             print(">>> Number must be between 0 and 100!") # Printing an explenatory massage, so the user knows what was wrong with the number.
-            print(">>> Didn't add", num, "to the list.") # Printing the number that wasn't added to the list.
     else: # If the string isn't in digit form, the following code is executed.
         print(">>>", num, "is not a valid number!") # Printing an error message.
 
@@ -48,7 +48,7 @@ def add_number_to_list(grades_list): # This function is used to allow the user t
             print("******************************************") # Adding a separation line.
     while True: # Starting a while loop with a constant condition. The reason behind using a constant condition is because the user can choose when to exit the loop, and a 'break' statement will be used.
         answer = input(">>> Add number(s) to the list? Y/N: ") # Confirming that the user wants to add a number to the list and continue going thorugh the loop.
-        if answer == 'Y' or answer == 'y': # Checking if the user inputs 'Y' or 'y'.
+        if answer.lower() == 'y': # Checking if the user inputs 'Y' or 'y'.
             print(">>> For multiple numbers, separate using a comma(,).") # Printing an informational message so the user knows what are the requirements for adding more than one number.
             number = input(">>> Input number(s): ").strip() # Taking the user's input, storing it into 'number', and striping the string of any whitespaces.
             if ',' in number: # If there are commans present in the string 'number', the program assumes that there's supposed to be more than one number.
@@ -59,7 +59,7 @@ def add_number_to_list(grades_list): # This function is used to allow the user t
             else: # If there's no commas in 'number', the following code is executed.
                 check_number(number, grades_list) # Calling the check_number function to verify the number.
                 print("******************************************")# Adding a separation line.
-        elif answer == 'N' or answer == 'n': # Checking if the user inputs 'N' or 'n'.
+        elif answer.lower() == 'n': # Checking if the user inputs 'N' or 'n'.
             print("******************************************") # Adding a separation line.
             break # Breaking out of the while loop.
         else: # Will execute if the user inputs anything other than 'Y', 'y', 'N' or 'n'.
@@ -72,65 +72,69 @@ def get_mean(grades_list): # This function is used to get the MEAN of the grades
 def get_median(grades_list): # This function is used to get the MEDIAN of the grades.
     # To do so, the list must be sorted into ascending or desceding order and a element should be removed from both ends, until only one or two elements remain.
     # If there is only on element, that element is the MEDIAN. If there are tow elements, the MEDIAN is the sum of both devided by 2.
-    grade_list = grades_list[:] # Because we will be removing elements from the list, we need to create a copy of the list. 
+    temp_list = grades_list[:] # Because we will be removing elements from the list, we need to create a copy of the list. 
     # The [:] operator indicates that we are actually creating a new memory location for the new list, not just a reference point to the same location.
     # This way we won't be removing element from the actual list of grades.
-    grade_list.sort() # Sorting the list in ascending order using the sort function.
+    temp_list.sort() # Sorting the list in ascending order using the sort function.
     while True: # Starting an indefinite while loop, as we will exit when we get a MEDIAN value.
-        if len(grade_list) > 2: # Checking if the list has more than 2 elements, in which case an element from both ends will be removed.
-            del grade_list[0] # Removing the first element from the list.
-            del grade_list[len(grade_list)-1] # Removing the last element from the list.
-        elif len(grade_list) == 2: # Checking if there are exactly two elements in the list, in which case, the elements are summed and devided by 2.
-            median = sum(grade_list) / 2 # Summing the two elements and deviding it by 2.
+        if len(temp_list) > 2: # Checking if the list has more than 2 elements, in which case an element from both ends will be removed.
+            del temp_list[0] # Removing the first element from the list.
+            del temp_list[len(temp_list)-1] # Removing the last element from the list.
+        elif len(temp_list) == 2: # Checking if there are exactly two elements in the list, in which case, the elements are summed and devided by 2.
+            median = sum(temp_list) / 2 # Summing the two elements and deviding it by 2.
             break # Now that we have the MEDIAN, we can break from the loop.
         else: # This code is reached only after the first 'if' condition is met at least once. This code is executed if there is only one element left in the list.
-            median = grade_list[0] # Getting the MEDIAN.
+            median = temp_list[0] # Getting the MEDIAN.
             break # Breaking out of the loop.
     return median # Returning the MEDIAN.
 
 def get_mode(grades_list): # This function is used to get the MODE(s) from the list of grades. 
     # As there can be more than one MODE, this function is a bit more complex.
     modes = [] # Initiating an empty list for all possible modes.
-    unique_freqs = [] # Initiating an empty list for all the existing unique frequencies in the list.
-    grades_dic = {} # Initiating an empty dictionary for storing each unique number along with its frequiency.
+    unique_frequencies = [] # Initiating an empty list for all the existing unique frequencies in the list.
+    grades_dictionary = {} # Initiating an empty dictionary for storing each unique number along with its frequiency.
     for num in grades_list: # We start iterating through the list of grades.
-        if num in grades_dic: # We check if the current element exists as a key inside the dictionary.
-            grades_dic[num] += 1 # If it does exist, we increment its value (frequency) by 1.
+        if num in grades_dictionary: # We check if the current element exists as a key inside the dictionary.
+            grades_dictionary[num] += 1 # If it does exist, we increment its value (frequency) by 1.
         else: # Otherwise.
-            grades_dic[num] = 1 # If it doesn't exist in the dictionary, we add it to the list and set its value to 1.
-    for key in grades_dic: # We start iterating through the dictionary, retrieving the keys, which in this case are also the unique grades.
-        value = grades_dic[key] # We get the value of that unique grade and story it into a variable 'value'.
-        if value not in unique_freqs: # We check if the value doesn't already exist inside the list of unique frequencies.
-            unique_freqs.append(value) # If the value doesn't exist inside the list of freqencies, we add it to it.
-    if len(unique_freqs) > 1: # Checking if the list of frequencies has more than one elements. 
+            grades_dictionary[num] = 1 # If it doesn't exist in the dictionary, we add it to the list and set its value to 1.
+    for key in grades_dictionary: # We start iterating through the dictionary, retrieving the keys, which in this case are also the unique grades.
+        value = grades_dictionary[key] # We get the value of that unique grade and story it into a variable 'value'.
+        if value not in unique_frequencies: # We check if the value doesn't already exist inside the list of unique frequencies.
+            unique_frequencies.append(value) # If the value doesn't exist inside the list of freqencies, we add it to it.
+    if len(unique_frequencies) > 1: # Checking if the list of frequencies has more than one elements. 
         # If there is only one element, there is no MODE, as that implies that all the elements of the list have the same number of occurences.
-        max_freq = max(unique_freqs) # We store the larges frequency in a variable 'max_freq'. This is the value of our mode(s).
-        for key in grades_dic: # We iterate thorugh the dictionary again to retrieve all the grades that have the same value as 'max_freq'.
-            if grades_dic[key] == max_freq: # Checking if the current key in the dictionary hase the same value as 'max_freq'.
+        max_frequency = max(unique_frequencies) # We store the larges frequency in a variable 'max_freq'. This is the value of our mode(s).
+        for key in grades_dictionary: # We iterate thorugh the dictionary again to retrieve all the grades that have the same value as 'max_freq'.
+            if grades_dictionary[key] == max_frequency: # Checking if the current key in the dictionary hase the same value as 'max_freq'.
                 modes.append(key) # If so, the key (grade) is stored inside the list of modes.
     return modes # Returning the MODE(s).
 
 def get_skew(grades_list, mean, median): # This method is used to get the skewness of the grades.
     # To find the skewness, we first need to calculate the standard deviation.
     # To do so, we first need to find the sum of all the squares of the differences between the elements of the list and the MEAN.
-    sum_of_difs = 0 # Initiating a variable for the sum of all differences.
+    added_squares = 0 # Initiating a variable for the sum of all differences.
     for num in grades_list: # Iterating through the list of grades.
-        sum_of_difs += pow(num - mean, 2) # Adding to the sum, the square of the difference between the current grade and the MEAN.
+        added_squares += pow(num - mean, 2) # Adding to the sum, the square of the difference between the current grade and the MEAN.
     # To find the standard deviation, we need to take the square root of the division between the sum of all squared differences, and the MEAN.
-    stan_div = pow(sum_of_difs/len(grades_list), 1/2) # Getting the square root of a number is the same as raising that number to 1/2.
+    stantard_deviation = pow(added_squares/len(grades_list), 0.5) # Getting the square root of a number is the same as raising that number to 1/2.
     # To get the skewness, we need to subtract the MEAN by the MEDIAN and multiply the result my 3, then deviding it by the stantard deviation.
-    skew = (3*(mean-median))/stan_div 
-    return skew # Returning the skewness.
+    if stantard_deviation != 0:
+        skewness = (3*(mean-median))/stantard_deviation 
+    else:
+        skewness = 0
+    return skewness # Returning the skewness.
 
 def get_main_menu(grades_list): # This method is used to get the main menu.
     while True: # Starting an indefinite loop, because the user can choose when to exit the program, in which case we'll break out of the loop.
-        print("1. Get the MEAN.") # Printing the option to get the MEAN.
-        print("2. Get the MEDIAN.") # Printing the option to get the MEDIAN.
-        print("3. Get the MODE.") # Printing the option to get the MODE.
-        print("4. Get the SKEWNESS.") # Printing the option to get the SKEWNESS.   
-        print("5. Display the list of grades.") # Printing the option to get display the list of grades
-        print("6. Add more grades to list.") # Priting the option to add more grades to the list.
-        print("Enter q to quit...") # Printing the option to quit the program.
+        print(" 1. Get the MEAN.") # Printing the option to get the MEAN.
+        print(" 2. Get the MEDIAN.") # Printing the option to get the MEDIAN.
+        print(" 3. Get the MODE.") # Printing the option to get the MODE.
+        print(" 4. Get the SKEWNESS.") # Printing the option to get the SKEWNESS.   
+        print(" 5. Display the list of grades.") # Printing the option to display the list of grades.
+        print(" 6. Add more grades to the list.") # Priting the option to add more grades to the list.
+        print(" 7. Empty list and start over.") # Printing the option to start over with an empty list.
+        print(" Enter q to quit...") # Printing the option to quit the program.
         choice = input(">>> Choice: ") # Taking the user's choice, and storing it into a variable 'choice'.
         print("******************************************")# Adding a separation line.
         if choice == '1': # Checking if the user chose option 1.
@@ -148,7 +152,7 @@ def get_main_menu(grades_list): # This method is used to get the main menu.
                 print(">>> The MODE is:", modes[0]) # Printing the MODE to the screen.
                 print("******************************************")# Adding a separation line.
             else: # If there's more than one mode, the following code is executed.
-                print(">>> The MODES are:", *modes) # Printing the modes to the screen.
+                print(">>> The MODES are:", modes) # Printing the modes to the screen.
                 print("******************************************")# Adding a separation line.
         elif choice == '4': # Checking if the user chose option 4.
             # Printing the SKEWNESS, by calling the get_skew function, along with the get_mean and get_median functions as parameters.
@@ -160,7 +164,10 @@ def get_main_menu(grades_list): # This method is used to get the main menu.
             print("******************************************")# Adding a separation line.
         elif choice == '6': # Checking if the user chose option 6.
             add_number_to_list(grades_list) # Calling the add_number_to_list function.
-        elif choice == 'q': # Checking if the user chose option 7.
+        elif choice == '7': # Checking if the user chose option 7.
+            grades_list = [] # Emptying the list of grades.
+            add_number_to_list(grades_list) # As the list has been emptied, we need to have the user input numbers manually.
+        elif choice == 'q': # Checking if the user chose option 8.
             with open("grades.txt", 'w+') as file: # Trying to open the file 'grades.txt' with 'w+, so that if there already is a file with that name,
                 # it would get overwritten. This is to make sure that in case the file gets temperd with during the running of the program, it gets fixed
                 # at the end. 'w+' is also used to make sure that in case the file didn't exist at the beginning of the program or in case the file gets
